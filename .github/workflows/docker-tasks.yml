@@ -49,6 +49,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           issue_title: Security_Alert
           issue_label: trivy,vulnerability
+# Push to ECR
       - name: Push to ECR
         id: ecr
         uses: jwalton/gh-ecr-push@v1.0.0
