@@ -58,3 +58,8 @@ jobs:
           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           region: us-east-1
           image: ubuntu:v${{ steps.semantic.outputs.new_release_version }}
+      - name: Tag branch in GitHub
+        uses: negz/create-tag@v1
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          version: v${{ steps.semantic.outputs.new_release_version }}
