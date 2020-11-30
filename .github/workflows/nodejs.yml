@@ -42,7 +42,7 @@ jobs:
       - name: "[6] run sonar analysis"
         run: |
            npm run testWithCoverage
-           branch=$(echo | )
+           branch=$(echo $GITHUB_REF | awk -F/ '{print $NF}')
            curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=${BRANCH}&project=sonar_nodejs_project&organization=${{ secrets.SONAR_ORG }}"
       - name: "[7] publish sonar dashboard"
         uses: SonarSource/sonarcloud-github-action@v1.4
