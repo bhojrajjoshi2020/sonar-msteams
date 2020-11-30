@@ -22,11 +22,7 @@ jobs:
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
         with:
-          branches: |    
-           [
-             'main',
-             'feature/**'
-           ]
+          branches: feature/test3
           dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
