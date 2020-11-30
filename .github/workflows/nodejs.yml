@@ -1,0 +1,105 @@
+name: node-js-workflow
+on:
+  push:
+    branches:  
+      - main
+      - feature/**
+  pull_request:
+    branches: [ main ]
+jobs:
+  NodeJS:    
+    runs-on: ubuntu-latest
+    name: "NodeJS Workflow"
+    steps:
+      - name: "[1] code checkout"
+        uses: actions/checkout@v2.3.4
+      - uses: brpaz/action-semantic-release@v1
+        with:
+          dry_run: "true"
+          install_plugins: "semantic-release-npm"
+          branch: main
+      - name: "[2] calculate semantic version"
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        with:
+          branch: main
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: validate calculated semantic version
+        if: steps.semantic.outputs.new_release_version == ''
+        run: | 
+           echo "ERROR => failed to calculate new semantic version, exiting..."
+           exit 1
+      - name: "[3] install nodejs 12.13.0"
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.13.0
+      - name: "[4] run npm build tasks"
+        run: npm install
+      - name: "[5] run npm test cases"
+        run: npm run test
+      - name: "[6] run sonar analysis"
+        run: |
+           npm run testWithCoverage
+           branch=$(echo | )
+           curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=${BRANCH}&project=sonar_nodejs_project&organization=${{ secrets.SONAR_ORG }}"
+      - name: "[7] publish sonar dashboard"
+        uses: SonarSource/sonarcloud-github-action@v1.4
+        with:
+          args: >
+           -Dsonar.projectKey=feature1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: "[8] linting dockerfile with hadolint"
+        uses: brpaz/hadolint-action@v1.1.0
+      - name: Build Docker Image
+        run: |
+          docker build -t nodejs-sample-app:v${{ steps.semantic.outputs.new_release_version }} .
+      - name: "[9] install inspec tool"
+        run: |
+          curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
+      - name: "[10] auditing docker image"
+        run: |
+          inspec exec --chef-license=accept docker.rb
+      - name: "[11] install dgoss"
+        uses: e1himself/goss-installation-action@v1.0.3
+        with:
+          version: v0.3.9
+      - name: "[12] run dockerfile test cases"
+        run: |
+          dgoss run ubuntu:v${{ steps.semantic.outputs.new_release_version }}
+      - name: "[13] scan docker image for vulnerability using trivy"
+        uses: lazy-actions/gitrivy@v2
+        with:
+          image: nodejs-sample-app:v${{ steps.semantic.outputs.new_release_version }}
+          token: ${{ secrets.GIT_TOKEN }}
+          issue_title: Security_Alert
+          issue_label: trivy,vulnerability
+      - name: "[14] push to image to ECR"
+        id: ecr
+        uses: jwalton/gh-ecr-push@v1.0.0
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: us-east-1
+          image: nodejs-sample-app:v${{ steps.semantic.outputs.new_release_version }}
+      - name: "[15] tag release GitHub"
+        uses: negz/create-tag@v1
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          version: v${{ steps.semantic.outputs.new_release_version }}
+  BuildNotification:
+    name: MSTeamSuccessBuildStatus
+    runs-on: ubuntu-latest
+    needs: NodeJS
+    steps:
+      - name: set notification to MSTeam
+        uses: skitionek/notify-microsoft-teams@v1.0.4
+        if: success()
+        with:
+          webhook_url: "${{ secrets.MSTEAM_WEBHOOK }}"
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}  
