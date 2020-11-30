@@ -1,16 +1,30 @@
 {
-  "name": "sample-nodejs-app",
+  "name": "nodejs-semver",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "jest",
+    "testWithCoverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhojrajjoshi2020/nodejs-semver.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bhojrajjoshi2020/nodejs-semver/issues"
+  },
+    "jest": {
+    "collectCoverage": true,
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "homepage": "https://github.com/bhojrajjoshi2020/nodejs-semver#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "expect": "^26.6.2",
+    "jest": "^26.6.3",
+    "jest-sonar-reporter": "^2.0.0"
   }
 }
