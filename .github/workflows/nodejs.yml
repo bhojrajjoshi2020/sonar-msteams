@@ -62,7 +62,7 @@ jobs:
           curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
       - name: "[10] auditing docker image"
         run: |
-          inspec exec --chef-license=accept docker.rb
+          inspec exec --chef-license=accept --input imgTag=v${{ steps.semantic.outputs.new_release_version }} docker.rb
       - name: "[11] install dgoss"
         uses: e1himself/goss-installation-action@v1.0.3
         with:
