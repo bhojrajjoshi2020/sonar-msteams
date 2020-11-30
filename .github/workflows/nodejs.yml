@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 jobs:
   NodeJS:    
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: "NodeJS Workflow"
     steps:
       - name: "[1] code checkout"
