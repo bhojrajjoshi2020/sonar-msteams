@@ -43,12 +43,12 @@ jobs:
         run: |
            npm run testWithCoverage
            branch=$(echo $GITHUB_REF | awk -F/ '{print $NF}')
-           curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=nodejs-semver-${branch}&project=sonar_nodejs_project&organization=${{ secrets.SONAR_ORG }}"
+           curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=nodejs-semver-${branch}&project=nodejs-semver-watsap&organization=${{ secrets.SONAR_ORG }}"
       - name: "[7] publish sonar dashboard"
         uses: SonarSource/sonarcloud-github-action@v1.4
         with:
           args: >
-           -Dsonar.projectKey=sonar_nodejs_project
+           -Dsonar.projectKey=nodejs-semver-watsap
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} 
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -56,7 +56,7 @@ jobs:
         uses: brpaz/hadolint-action@v1.1.0
       - name: Build Docker Image
         run: |
-          docker build -t semvertestrepo:v${{ steps.semantic.outputs.new_release_version }} .
+          docker build -t nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }} .
       - name: "[9] install inspec tool"
         run: |
           curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
@@ -69,11 +69,11 @@ jobs:
           version: v0.3.9
       - name: "[12] run dockerfile test cases"
         run: |
-          dgoss run semvertestrepo:v${{ steps.semantic.outputs.new_release_version }}
+          dgoss run nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }}
       - name: "[13] scan docker image for vulnerability using trivy"
         uses: lazy-actions/gitrivy@v2
         with:
-          image: semvertestrepo:v${{ steps.semantic.outputs.new_release_version }}
+          image: nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }}
           token: ${{ secrets.GIT_TOKEN }}
           issue_title: Security_Alert
           issue_label: trivy,vulnerability
@@ -84,7 +84,7 @@ jobs:
           access-key-id: ${{ secrets.PERSONAL_AWS_ACCESS_KEY_ID }}
           secret-access-key: ${{ secrets.PERSONAL_AWS_SECRET_ACCESS_KEY }}
           region: us-east-1
-          image: semvertestrepo:v${{ steps.semantic.outputs.new_release_version }}
+          image: nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }}
       - name: "[15] tag release GitHub"
         uses: negz/create-tag@v1
         with:
