@@ -1,4 +1,7 @@
-FROM ubuntu:18.04
-LABEL image.name="ubuntu"
-RUN echo hello
-CMD ["sleep","60"]
+FROM node:6-alpine
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD [ "node", "server.js" ]
