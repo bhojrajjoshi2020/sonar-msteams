@@ -25,7 +25,7 @@ jobs:
           branches: |    
            [
              'main',
-             '^feature/**'
+             'feature/**'
            ]
           dry_run: true
         env:
