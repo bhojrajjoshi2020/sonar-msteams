@@ -43,12 +43,12 @@ jobs:
         run: |
            npm run testWithCoverage
            branch=$(echo $GITHUB_REF | awk -F/ '{print $NF}')
-           curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=${BRANCH}&project=sonar_nodejs_project&organization=${{ secrets.SONAR_ORG }}"
+           curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=${branch}&project=sonar_nodejs_project&organization=${{ secrets.SONAR_ORG }}"
       - name: "[7] publish sonar dashboard"
         uses: SonarSource/sonarcloud-github-action@v1.4
         with:
           args: >
-           -Dsonar.projectKey=feature1
+           -Dsonar.projectKey=sonar_nodejs_project
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} 
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
