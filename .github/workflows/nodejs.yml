@@ -26,6 +26,14 @@ jobs:
           dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: "[14] push to image to ECR"
+        id: ecr
+        uses: jwalton/gh-ecr-push@v1.0.0
+        with:
+          access-key-id: ${{ secrets.PERSONAL_AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.PERSONAL_AWS_SECRET_ACCESS_KEY }}
+          region: us-east-1
+          image: nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }}
   BuildNotification:
     name: MSTeamBuildStatus
     runs-on: ubuntu-latest
