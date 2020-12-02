@@ -90,16 +90,16 @@ jobs:
         with:
           token: ${{ secrets.GIT_TOKEN }}
           version: v${{ steps.semantic.outputs.new_release_version }}
-  BuildNotification:
+  BuildNotificationSuccess:
     name: MSTeamSuccessBuildStatus
     runs-on: ubuntu-latest
     needs: NodeJS
     steps:
       - name: set notification to MSTeam
         uses: skitionek/notify-microsoft-teams@v1.0.4
-        if: success()
+        if: always()
         with:
           webhook_url: "${{ secrets.MSTEAM_WEBHOOK }}"
           needs: ${{ toJson(needs) }}
           job: ${{ toJson(job) }}
-          steps: ${{ toJson(steps) }}  
+          steps: ${{ toJson(steps) }} 
