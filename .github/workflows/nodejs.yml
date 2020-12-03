@@ -41,12 +41,7 @@ jobs:
           needs: ${{ toJson(needs) }}
           job: ${{ toJson(job) }}
           steps: ${{ toJson(steps) }}
-          raw: >-
-            {
-              "@type": "MessageCard",
-              "@context": "http://schema.org/extensions",
-              "title": "All jobs passed!"
-            }
+          raw: "All jobs passed!"
   BuildNotificationFailure:
     name: MSTeamBuildStatusFailure
     runs-on: ubuntu-latest
@@ -61,9 +56,4 @@ jobs:
           needs: ${{ toJson(needs) }}
           job: ${{ toJson(job) }}
           steps: ${{ toJson(steps) }}
-          raw: >-
-            {
-              "@type": "MessageCard",
-              "@context": "http://schema.org/extensions",
-              "title": "No ${variables} avaliable in here"
-            }
+          raw: "Failed step above!"
