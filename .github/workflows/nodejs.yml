@@ -13,19 +13,6 @@ jobs:
     steps:
       - name: "[1] code checkout"
         uses: actions/checkout@v2.3.4
-      - uses: brpaz/action-semantic-release@v1
-        with:
-          dry_run: "true"
-          install_plugins: "semantic-release-npm"
-          branch: main
-      - name: "[2] calculate semantic version"
-        uses: cycjimmy/semantic-release-action@v2
-        id: semantic
-        with:
-          branches: feature/test3
-          dry_run: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       
   BuildNotificationSuccess:
     name: MSTeamBuildStatusSuccess
@@ -43,9 +30,7 @@ jobs:
           steps: ${{ toJson(steps) }}
           raw: >-
             {
-              "@type": "MessageCard",
-              "@context": "http://schema.org/extensions",
-              "title": "No ${variables} avaliable in here"
+              "title": "Nothing avaliable in here"
             }
   BuildNotificationFailure:
     name: MSTeamBuildStatusFailure
