@@ -22,4 +22,4 @@ jobs:
           needs: ${{ toJson(needs) }}
           job: ${{ toJson(job) }}
           steps: ${{ toJson(steps) }}
-          raw: ${{ toJson("Nothing avaliable in here") }}
+          raw: ${{ toJson(steps) }}
