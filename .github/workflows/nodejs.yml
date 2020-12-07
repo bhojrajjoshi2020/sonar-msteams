@@ -26,4 +26,4 @@ jobs:
             - text: View Job Execution Status
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
       - name: Build breaker
-        run: exit 1
+        run: exit 0
