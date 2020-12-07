@@ -24,14 +24,8 @@ jobs:
           custom-actions: |
             - text: View Job Execution Status
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
-      - name: Sonar check
-        uses: ./
-        id: SonarCheck
-        with:
-          sonar_url: 'https://sonarcloud.io'
-          sonar_branch: 'main'
-          sonar_token: ${{ secrets.SONAR_TOKEN_FAIL }}
-          project_key: 'sonar_test_github_project'
+      - name: Build breaker
+        run: exit 1
   
   MSTeamsExitAlertGenerator:
     runs-on: ubuntu-latest
