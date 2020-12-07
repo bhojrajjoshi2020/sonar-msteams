@@ -32,5 +32,5 @@ jobs:
           sonar_url: 'https://sonarcloud.io'
           sonar_branch: 'main'
           sonar_token: ${{ secrets.SONAR_TOKEN }}
-          project_key: 'sonar_test_github_project'
+          project_key: 'ssonar_test_github_project'
   
