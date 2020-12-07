@@ -32,4 +32,7 @@ jobs:
           custom-facts: |
             - name: JobStatus
               value: ${{ job.status }}
+          custom-actions: |
+            - text: View PR
+              url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
   
