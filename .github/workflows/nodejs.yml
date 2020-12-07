@@ -1,7 +1,7 @@
 name: MS Teams Ingegration POC
 on: [push]
 jobs:
-  JobStartAlertGenerator:
+  MSTeamsStartAlertGenerator:
     runs-on: ubuntu-latest
     name: MSTeamsStartAlertGenerator
     steps:
@@ -14,7 +14,7 @@ jobs:
           webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
           card-layout-start: complete
           show-on-start: true
-          show-on-exit: false
+          show-on-exit: true
           environment: development
           custom-facts: |
             - name: Initiated by
@@ -26,30 +26,3 @@ jobs:
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
       - name: Build breaker
         run: exit 1
-  
-  MSTeamsExitAlertGenerator:
-    runs-on: ubuntu-latest
-    name: MSTeamsExitAlertGenerator
-    needs: [JobStartAlertGenerator]
-    if: always()
-    steps:
-      - name: GitHub Pipeline End Alert
-        uses: toko-bifrost/ms-teams-deploy-card@3.1.2
-        if: always()
-        with:
-          github-token: ${{ secrets.GIT_TOKEN }}
-          webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
-          card-layout-exit: complete
-          show-on-failure: true
-          show-on-exit: true
-          show-on-start: false
-          environment: development
-          custom-facts: |
-            - name: Initiated by
-              value: ${{ github.actor }}
-            - name: Workflow name
-              value: ${{ github.workflow }}
-          custom-actions: |
-            - text: View Job Execution Status
-              url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
-  
