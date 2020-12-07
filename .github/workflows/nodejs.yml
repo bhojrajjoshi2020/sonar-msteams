@@ -24,28 +24,4 @@ jobs:
 
           webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
 
-  MSTeamExitStatus:
-
-    runs-on: ubuntu-latest
-
-    name: MSTeamExitAlert
-
-    needs: [SonarBuildBreaker]
-
-    steps:
-
-      - name: GitHub Pipeline Exit Alert
-
-        uses: toko-bifrost/ms-teams-deploy-card@3.1.2
-
-        if: always()
-
-        with:
-
-          github-token: ${{ secrets.GIT_TOKEN }}
-
-          webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
-
-          show-on-failure: true
-
-          show-on-exit: true
+  
