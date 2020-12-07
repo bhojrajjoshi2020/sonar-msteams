@@ -7,17 +7,11 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  NodeJS:    
-    runs-on: ubuntu-latest
-    name: "NodeJS Workflow"
-    steps:
-      - name: "[1] code checkout"
-        uses: actions/checkout@v2.3.4
-      
+       
   BuildNotificationSuccess:
     name: MSTeamBuildStatusSuccess
     runs-on: ubuntu-latest
-    needs: NodeJS
+    #needs: NodeJS
     #if: always()
     steps:
       - name: send success notification to MSTeam
@@ -28,22 +22,4 @@ jobs:
           needs: ${{ toJson(needs) }}
           job: ${{ toJson(job) }}
           steps: ${{ toJson(steps) }}
-          raw: >-
-            {
-              "title": "Nothing avaliable in here"
-            }
-  BuildNotificationFailure:
-    name: MSTeamBuildStatusFailure
-    runs-on: ubuntu-latest
-    needs: NodeJS
-    #if: failure()
-    steps:
-      - name: send failure notification to MSTeam
-        uses: skitionek/notify-microsoft-teams@v1.0.4
-        if: failure()
-        with:
-          webhook_url: "${{ secrets.MSTEAM_WEBHOOK }}"
-          needs: ${{ toJson(needs) }}
-          job: ${{ toJson(job) }}
-          steps: ${{ toJson(steps) }}
-          raw: "Failed step above!"
+          raw: "Nothing avaliable in here"
