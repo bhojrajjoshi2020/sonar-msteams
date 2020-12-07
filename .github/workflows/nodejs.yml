@@ -1,20 +1,49 @@
 name: MS Teams Ingegration POC
 on: [push]
 jobs:
-  AlertGenerator:
+  JobStartAlertGenerator:
     runs-on: ubuntu-latest
-    name: MSTeamsAlertGenerator
+    name: MSTeamsStartAlertGenerator
     steps:
       - name: Code Checkout
         uses: actions/checkout@v2
-      - name: GitHub Pipeline Start/End Alert
+      - name: GitHub Pipeline Start Alert
         uses: toko-bifrost/ms-teams-deploy-card@3.1.2
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
           webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
           card-layout-start: complete
-          card-layout-exit: compact
           show-on-start: true
+          show-on-exit: false
+          environment: development
+          custom-facts: |
+            - name: Initiated by
+              value: ${{ github.actor }}
+            - name: Workflow name
+              value: ${{ github.workflow }}
+          custom-actions: |
+            - text: View Job Execution Status
+              url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
+      - name: Sonar check
+        uses: ./
+        id: SonarCheck
+        with:
+          sonar_url: 'https://sonarcloud.io'
+          sonar_branch: 'main'
+          sonar_token: ${{ secrets.SONAR_TOKEN }}
+          project_key: 'sonar_test_github_project'
+  
+  MSTeamsExitAlertGenerator:
+    runs-on: ubuntu-latest
+    name: MSTeamsExitAlertGenerator
+    steps:
+      - name: GitHub Pipeline End Alert
+        uses: toko-bifrost/ms-teams-deploy-card@3.1.2
+        with:
+          github-token: ${{ secrets.GIT_TOKEN }}
+          webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
+          card-layout-exit: complete
+          show-on-start: false
           show-on-exit: true
           environment: development
           custom-facts: |
@@ -25,12 +54,4 @@ jobs:
           custom-actions: |
             - text: View Job Execution Status
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
-      - name: Build breaker
-        uses: ./
-        id: buildbreaker
-        with:
-          sonar_url: 'https://sonarcloud.io'
-          sonar_branch: 'main'
-          sonar_token: ${{ secrets.SONAR_TOKEN }}
-          project_key: 'ssonar_test_github_project'
   
