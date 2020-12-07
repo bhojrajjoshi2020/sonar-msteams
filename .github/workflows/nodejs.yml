@@ -31,16 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     name: MSTeamsExitAlertGenerator
     needs: [JobStartAlertGenerator]
-    if: always()
     steps:
       - name: GitHub Pipeline End Alert
         uses: toko-bifrost/ms-teams-deploy-card@3.1.2
+        if: always()
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
           webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
           card-layout-exit: complete
-          show-on-start: false
+          show-on-failure: true
           show-on-exit: true
+          show-on-start: false
           environment: development
           custom-facts: |
             - name: Initiated by
