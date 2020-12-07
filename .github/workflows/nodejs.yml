@@ -1,20 +1,13 @@
+name: MS Teams Ingegration POC
 on: [push]
-
 jobs:
-
-  SonarBuildBreaker:
-
+  AlertGenerator:
     runs-on: ubuntu-latest
-
-    name: SonarBuildBreaker
-
+    name: MSTeamsAlertGenerator
     steps:
-
       - name: Code Checkout
-
         uses: actions/checkout@v2
-
-      - name: GitHub Pipeline Start Alert
+      - name: GitHub Pipeline Start/End Alert
         uses: toko-bifrost/ms-teams-deploy-card@3.1.2
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
@@ -23,15 +16,16 @@ jobs:
           card-layout-exit: complete
           show-on-start: true
           show-on-exit: true
-          #show-on-failure: true
           environment: development
           custom-facts: |
-            - name: JobStatus
-              value: ${{ job.status }}
+            - name: Initiated by
+              value: ${{ github.actor }}
+            - name: Workflow name
+              value: ${{ github.workflow }}
           custom-actions: |
             - text: View Job Execution Status
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
-      - name: Sonar Build Breaker
+      - name: Build breaker
         uses: ./
         id: buildbreaker
         with:
