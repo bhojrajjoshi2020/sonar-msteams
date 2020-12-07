@@ -13,6 +13,7 @@ jobs:
           github-token: ${{ secrets.GIT_TOKEN }}
           webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
           card-layout-start: complete
+          card-layout-exit: complete:  
           show-on-start: true
           show-on-exit: true
           environment: development
