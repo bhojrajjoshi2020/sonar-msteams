@@ -24,22 +24,6 @@ jobs:
 
           webhook-uri: ${{ secrets.MSTEAM_WEBHOOK }}
 
-      - name: Sonar Build Breaker
-
-        uses: ./ 
-
-        id: buildbreaker
-
-        with:
-
-          sonar_url: 'https://sonarcloud.io'
-
-          sonar_branch: 'main'
-
-          sonar_token: ${{ secrets.SONAR_TOKEN }}
-
-          project_key: 'sonar_test_github_project'
-
   MSTeamExitStatus:
 
     runs-on: ubuntu-latest
