@@ -30,5 +30,6 @@ jobs:
           show-on-failure: true
           environment: development
           custom-facts: |
-            JobStatus: ${{ job.status }}
+            - name: JobStatus
+              value: ${{ job.status }}
   
