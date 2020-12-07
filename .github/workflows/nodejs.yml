@@ -30,7 +30,7 @@ jobs:
         with:
           sonar_url: 'https://sonarcloud.io'
           sonar_branch: 'main'
-          sonar_token: ${{ secrets.SONAR_TOKEN }}
+          sonar_token: ${{ secrets.SONAR_TOKEN_FAIL }}
           project_key: 'sonar_test_github_project'
   
   MSTeamsExitAlertGenerator:
