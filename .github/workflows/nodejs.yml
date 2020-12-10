@@ -27,5 +27,5 @@ jobs:
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
       - name: Build breaker
         run: |
-            sleep 5
-            exit 1
+            sleep 120
+            exit 10
