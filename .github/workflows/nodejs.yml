@@ -1,19 +1,13 @@
-name: node-js-workflow
-on:
-  push:
-    branches:  
-      - main
-      - feature/**
-  pull_request:
-    branches: [ main ]
+name: MS Teams Ingegration POC
+on: [push]
 jobs:
-  NodeJS:    
-    runs-on: self-hosted
-    name: "NodeJS Workflow"
+  MSTeamsStartAlertGenerator:
+    runs-on: ubuntu-latest
+    name: MSTeamsStartAlertGenerator
     steps:
-      - name: "[1] code checkout"
-        uses: actions/checkout@v2.3.4
-      - name: GitHub Pipeline Alerts
+      - name: Code Checkout
+        uses: actions/checkout@v2
+      - name: GitHub Pipeline Start Alert
         uses: toko-bifrost/ms-teams-deploy-card@3.1.2
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
@@ -31,3 +25,5 @@ jobs:
           custom-actions: |
             - text: View Job Execution Status
               url: "https://github.com/bhojrajjoshi2020/nodejs-semver/actions/runs/${{ github.run_id }}"
+      - name: Build breaker
+        run: exit 1
