@@ -1,5 +1,11 @@
 name: MS Teams Ingegration POC
-on: [push]
+on:
+  push:
+    branches:  
+      - main
+      - feature/**
+  pull_request:
+    branches: [ main ]
 jobs:
   MSTeamsStartAlertGenerator:
     runs-on: ubuntu-latest
