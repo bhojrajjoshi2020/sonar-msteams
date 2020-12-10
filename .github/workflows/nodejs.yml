@@ -30,7 +30,7 @@ jobs:
               value: ${{ github.workflow }}
           custom-actions: |
             - text: View Job Execution Status
-              url: "https://github.com/${{ GITHUB_REPOSITORY }}/actions/runs/${{ github.run_id }}"
+              url: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
       - uses: brpaz/action-semantic-release@v1
         with:
           dry_run: "true"
