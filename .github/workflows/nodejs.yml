@@ -1,4 +1,4 @@
-name: node-js-workflow
+name: SonarBuildBreakerAndNotifier
 on:
   push:
     branches:  
@@ -7,13 +7,13 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  NodeJS:
+  SonarBuildBreakerAndNotifier:
     runs-on: ubuntu-latest
-    name: "NodeJS Workflow"
+    name: "Sonar Build MS Teams Notifier Workflow"
     steps:
-      - name: "[1] code checkout"
+      - name: "code checkout"
         uses: actions/checkout@v2.3.4
-      - name: GitHub Pipeline Alerts
+      - name: Pipeline MS Teams Alerts
         uses: toko-bifrost/ms-teams-deploy-card@3.1.2
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
@@ -31,42 +31,20 @@ jobs:
           custom-actions: |
             - text: View Job Execution Status
               url: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      - uses: brpaz/action-semantic-release@v1
-        with:
-          dry_run: "true"
-          install_plugins: "semantic-release-npm"
-          branch: main
-      - name: "[2] calculate semantic version"
-        uses: cycjimmy/semantic-release-action@v2
-        id: semantic
-        with:
-          branches: |    
-           [
-             'main',
-             'feature/**'
-           ]
-          dry_run: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-      - name: validate calculated semantic version
-        if: steps.semantic.outputs.new_release_version == ''
-        run: | 
-           echo "ERROR => failed to calculate new semantic version, exiting..."
-           exit 1
-      - name: "[3] install nodejs 12.13.0"
+      - name: "install nodejs 12.13.0"
         uses: actions/setup-node@v1
         with:
           node-version: 12.13.0
-      - name: "[4] run npm build tasks"
+      - name: "run npm build tasks"
         run: npm install
-      - name: "[5] run npm test cases"
+      - name: "run npm test cases"
         run: npm run test
-      - name: "[6] run sonar analysis"
+      - name: "run sonar analysis"
         run: |
            npm run testWithCoverage
            branch=$(echo $GITHUB_REF | awk -F/ '{print $NF}')
            curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=nodejs-semver-${branch}&project=nodejs-semver-watsap&organization=${{ secrets.SONAR_ORG }}"
-      - name: "[7] publish sonar dashboard"
+      - name: "publish sonar dashboard"
         uses: SonarSource/sonarcloud-github-action@v1.4
         with:
           args: >
@@ -77,33 +55,3 @@ jobs:
       - name: Sonar Validation
         run: |
           ./SonarBuildBreaker.sh --sonar-url=https://sonarcloud.io --sonar-token=${{ secrets.SONAR_TOKEN }} --project-key=nodejs-semver-watsap --branch=feature/test3
-      - name: "[8] linting dockerfile with hadolint"
-        uses: brpaz/hadolint-action@v1.1.0
-      - name: Build Docker Image
-        run: |
-          docker build -t nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }} .
-      - name: "[9] install inspec tool"
-        run: |
-          curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P inspec
-      - name: "[10] auditing docker image"
-        run: |
-          inspec exec --chef-license=accept --input imgTag=v${{ steps.semantic.outputs.new_release_version }} docker.rb
-      - name: "[11] install dgoss"
-        uses: e1himself/goss-installation-action@v1.0.3
-        with:
-          version: v0.3.9
-      - name: "[12] run dockerfile test cases"
-        run: |
-          dgoss run nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }}
-      - name: "[13] scan docker image for vulnerability using trivy"
-        uses: lazy-actions/gitrivy@v2
-        with:
-          image: nodejs-semver-repo:v${{ steps.semantic.outputs.new_release_version }}
-          token: ${{ secrets.GIT_TOKEN }}
-          issue_title: Security_Alert
-          issue_label: trivy,vulnerability
-      - name: "[15] tag release GitHub"
-        uses: negz/create-tag@v1
-        with:
-          token: ${{ secrets.GIT_TOKEN }}
-          version: v${{ steps.semantic.outputs.new_release_version }}
