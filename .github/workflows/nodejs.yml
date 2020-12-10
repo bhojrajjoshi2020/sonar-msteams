@@ -54,4 +54,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Sonar Validation
         run: |
-          ./SonarBuildBreaker.sh --sonar-url=https://sonarcloud.io --sonar-token=${{ secrets.SONAR_TOKEN }} --project-key=nodejs-semver-watsap --branch=feature/test3
+          sh SonarBuildBreaker.sh --sonar-url=https://sonarcloud.io --sonar-token=${{ secrets.SONAR_TOKEN }} --project-key=nodejs-semver-watsap --branch=feature/test3
