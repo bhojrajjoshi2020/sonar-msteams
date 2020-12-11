@@ -3,8 +3,8 @@
 This is a POC code to demostrate how notifications are sent to MS Teams in different stages (start, success and/or failure) of a workflow. We are using a community package **toko-bifrost/ms-teams-deploy-card** to achieve this. This document describes how to integrate this package in our workflow and required configuration for the same.
 
 For more information:
-MS Teams Deploy Card package: https://github.com/toko-bifrost/ms-teams-deploy-card
-Creating MS Teams ingress webhook: https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using
+- MS Teams Deploy Card package: https://github.com/toko-bifrost/ms-teams-deploy-card
+- Creating MS Teams ingress webhook: https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using
 
 ## Setting up a custom incoming webhook in MS Teams:
 
