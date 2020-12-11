@@ -43,10 +43,14 @@ For more information:
 ## Sample MS Teams Cards published to a channel
 Once the workflow runs as configured, it will send the very first alert to the channel that looks like below:
 
+![Screenshot](docs/start_complete.png)
+
 Depending upon the success or failure of the job, the below card will be displayed on the challel.
 
-### Success card (complete)
+### Success card (compact)
+
+![Screenshot](docs/success_compact.png)
 
 ### Failure card (complete)
 
-### Failure card (compact)
+![Screenshot](docs/failure_complete.png)
