@@ -7,13 +7,13 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  MSTeamsStartAlertGenerator:
+  MSTeamsAlertGenerator:
     runs-on: ubuntu-latest
-    name: MSTeamsStartAlertGenerator
+    name: MSTeamsAlertGenerator
     steps:
       - name: Code Checkout
         uses: actions/checkout@v2
-      - name: GitHub Pipeline Start Alert
+      - name: GitHub Pipeline Status Alert
         uses: toko-bifrost/ms-teams-deploy-card@3.1.2
         with:
           github-token: ${{ secrets.GIT_TOKEN }}
@@ -55,5 +55,5 @@ jobs:
       - name: Sonar Validation
         run: |
           bash SonarBuildBreaker.sh --sonar-url=https://sonarcloud.io --sonar-token=${{ secrets.SONAR_TOKEN }} --project-key=nodejs-semver-watsap --branch=feature/test3
-      - name: "Does not run"
-        run: echo "Extra step, will not run if Sonar build fails."      
+      - name: "May not run"
+        run: echo "Extra step, only runs if Sonar Validation passes."      
