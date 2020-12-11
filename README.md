@@ -1,1 +1,1 @@
-# semver-docker test2
+# POC for MS Teams and SonarCloud Integration with GitHub Actions
