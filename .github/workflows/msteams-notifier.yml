@@ -56,4 +56,4 @@ jobs:
         run: |
           bash SonarBuildBreaker.sh --sonar-url=https://sonarcloud.io --sonar-token=${{ secrets.SONAR_TOKEN }} --project-key=nodejs-semver-watsap --branch=feature/test3
       - name: "May not run"
-        run: echo "Extra step, only runs if Sonar Validation passes.."      
+        run: echo "Extra step, only runs if Sonar Validation passes."      
