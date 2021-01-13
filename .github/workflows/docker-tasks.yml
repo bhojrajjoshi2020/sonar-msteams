@@ -21,10 +21,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
       - name: Next semantic version
-        if: steps.semantic.outputs.new_release_version == ''
-        run: | 
-           echo "ERROR => failed to fetch new semantic version, exiting..."
-           exit 1
+#         if: steps.semantic.outputs.new_release_version == ''
+#         run: | 
+#            echo "ERROR => failed to fetch new semantic version, exiting..."
+#            exit 1
       - name: Linting Dockerfile with hadolint
         uses: brpaz/hadolint-action@v1.1.0
       - name: Build Docker Image
