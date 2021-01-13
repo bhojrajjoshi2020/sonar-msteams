@@ -1,4 +1,4 @@
-name: MS Teams Ingegration POC
+name: MS Teams Ingegration POC2
 on:
   push:
     branches:  
