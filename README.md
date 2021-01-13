@@ -1,2 +1,2 @@
 # POC for MS Teams and SonarCloud Integration with GitHub Actions
-test sonar1
+test sonar2
