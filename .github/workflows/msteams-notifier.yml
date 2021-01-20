@@ -44,14 +44,14 @@ jobs:
            npm run testWithCoverage
            branch=$(echo $GITHUB_REF | awk -F/ '{print $NF}')
            curl -v -X POST https://${{ secrets.SONAR_TOKEN }}@sonarcloud.io/api/projects/create -d "name=nodejs-semver-${branch}&project=nodejs-semver-watsap&organization=${{ secrets.SONAR_ORG }}"
-      - name: "publish sonar dashboard"
-        uses: SonarSource/sonarcloud-github-action@v1.4
-        with:
-          args: >
-           -Dsonar.projectKey=nodejs-semver-watsap
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} 
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#       - name: "publish sonar dashboard"
+#         uses: SonarSource/sonarcloud-github-action@v1.4
+#         with:
+#           args: >
+#            -Dsonar.projectKey=nodejs-semver-watsap
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }} 
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Sonar Validation
         run: |
           bash SonarBuildBreaker.sh --sonar-url=https://sonarcloud.io --sonar-token=${{ secrets.SONAR_TOKEN }} --project-key=nodejs-semver-watsap --branch=feature/test3
